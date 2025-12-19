@@ -1,0 +1,10 @@
+{
+    "group_id": "YOUR_GROUP_ID",
+    "group_name": "Your Group Name",
+    "metrics": {
+        "dice_score": 0.00,
+        "miou": 0.00,
+        "fwiou": 0.00
+    },
+    "submission_date": "YYYY-MM-DD"
+}
