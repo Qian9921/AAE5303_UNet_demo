@@ -1,10 +1,9 @@
 {
-    "group_id": "YOUR_GROUP_ID",
-    "group_name": "Your Group Name",
+    "group_name": "Team Alpha",
+    "project_private_repo_url": "https://github.com/xxxxxx.git",
     "metrics": {
-        "dice_score": 0.00,
-        "miou": 0.00,
-        "fwiou": 0.00
-    },
-    "submission_date": "YYYY-MM-DD"
+        "dice_score": 38.54,
+        "miou": 32.93,
+        "fwiou": 65.21
+    }
 }

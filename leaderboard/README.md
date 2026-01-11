@@ -256,13 +256,12 @@ def calculate_all_metrics(confusion_matrix: np.ndarray) -> dict:
         'fwiou': round(float(fwiou) * 100, 2)
     }
 
-def generate_submission_json(group_id: str, group_name: str, metrics: dict, output_path: str):
+def generate_submission_json(group_name: str, repo_url: str, metrics: dict, output_path: str):
     """Generate submission JSON file."""
     submission = {
-        "group_id": group_id,
         "group_name": group_name,
-        "metrics": metrics,
-        "submission_date": str(date.today())
+        "project_private_repo_url": repo_url,
+        "metrics": metrics
     }
     
     with open(output_path, 'w') as f:
@@ -284,10 +283,10 @@ if __name__ == "__main__":
     }
     
     generate_submission_json(
-        group_id="Group_01",
-        group_name="Your Group Name",
+        group_name="Team Alpha",
+        repo_url="https://github.com/yourusername/project.git",
         metrics=metrics,
-        output_path="Group_01_leaderboard.json"
+        output_path="TeamAlpha_leaderboard.json"
     )
 ```
 
@@ -299,18 +298,22 @@ Submit a JSON file with the following format:
 
 ```json
 {
-    "group_id": "Group_01",
     "group_name": "Team Alpha",
+    "project_private_repo_url": "https://github.com/yourusername/project.git",
     "metrics": {
         "dice_score": 38.54,
         "miou": 32.93,
         "fwiou": 65.21
-    },
-    "submission_date": "2024-12-18"
+    }
 }
 ```
 
-Template file: [submission_template.json](./submission_template.json)
+**Required Fields:**
+- `group_name`: Your team name
+- `project_private_repo_url`: Your private GitHub repository URL (must end with `.git`)
+- `metrics`: Performance metrics (Dice Score, mIoU, FWIoU in percentage)
+
+**Template file**: [submission_template.json](./submission_template.json)
 
 ---
 
@@ -318,10 +321,30 @@ Template file: [submission_template.json](./submission_template.json)
 
 | Rank | Group | Dice Score ↑ | mIoU ↑ | FWIoU ↑ | Date |
 |------|-------|--------------|--------|---------|------|
-| - | **Baseline (Instructor)** | 38.54% | 32.93% | 65.21% | 2024-12-18 |
+| - | **Baseline (Instructor)** | 39.80% | **72.73%** | **88.85%** | 2026-01-09 |
+
+### 🎯 Baseline Details
+
+**Model**: UNet with AdamW optimizer (Epoch 65)
+- **Configuration**: Batch Size=1, Scale=0.25, AdamW optimizer, lr=5e-5
+- **Hardware**: NVIDIA RTX 3060 6GB (consumer GPU)
+- **Training**: 100 epochs, ~26 hours total
+- **Classes Used**: 14 valid classes (excluding unnamed classes)
+- **Key Achievement**: 72.73% mIoU on aerial imagery segmentation
+
+**Per-Class Performance** (Top 5):
+- Green Field: 94.81% IoU
+- Roof: 91.32% IoU  
+- Solar Board: 83.52% IoU
+- Background: 81.26% IoU
+- Dirt Motor Road: 78.81% IoU
+
+> **🎓 Your Goal**: Beat this baseline to appear on the leaderboard!
 
 ---
 
-## 🌐 Leaderboard Website & Baseline
+## 🌐 Leaderboard Website
 
-> **📢 The leaderboard submission website and live ranking will be announced later.**
+**Live Rankings**: [https://qian9921.github.io/leaderboard_web/](https://qian9921.github.io/leaderboard_web/)
+
+> View real-time leaderboard rankings and submit your results online!

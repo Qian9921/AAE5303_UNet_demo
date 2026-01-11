@@ -27,14 +27,13 @@ Submit your results using the following JSON format:
 
 ```json
 {
-    "group_id": "YOUR_GROUP_ID",
-    "group_name": "Your Group Name",
+    "group_name": "Team Alpha",
+    "project_private_repo_url": "https://github.com/xxxxxx.git",
     "metrics": {
         "dice_score": 38.54,
         "miou": 32.93,
         "fwiou": 65.21
-    },
-    "submission_date": "YYYY-MM-DD"
+    }
 }
 ```
 
@@ -42,18 +41,17 @@ Submit your results using the following JSON format:
 
 | Field | Type | Description | Example |
 |-------|------|-------------|---------|
-| `group_id` | string | Your group ID | `"Group_01"` |
-| `group_name` | string | Your group name | `"Team Alpha"` |
+| `group_name` | string | Your group/team name | `"Team Alpha"` |
+| `project_private_repo_url` | string | Your private GitHub repo URL | `"https://github.com/yourusername/project.git"` |
 | `metrics.dice_score` | number | Dice Score (%) | `38.54` |
 | `metrics.miou` | number | mIoU value (%) | `32.93` |
 | `metrics.fwiou` | number | FWIoU value (%) | `65.21` |
-| `submission_date` | string | Date (YYYY-MM-DD) | `"2024-12-18"` |
 
 ### File Naming
 
-`{GroupID}_leaderboard.json`
+`{YourGroupName}_leaderboard.json`
 
-Example: `Group_01_leaderboard.json`
+Example: `TeamAlpha_leaderboard.json`
 
 ---
 
@@ -75,9 +73,9 @@ python train.py \
 python evaluate_submission.py \
     --model checkpoints/checkpoint_epoch20.pth \
     --scale 0.25 \
-    --output Group_01_leaderboard.json \
-    --team "Your Group Name" \
-    --group-id "Group_01"
+    --output TeamAlpha_leaderboard.json \
+    --team "Team Alpha" \
+    --repo-url "https://github.com/yourusername/project.git"
 ```
 
 ### Step 3: Verify JSON Format
@@ -87,19 +85,24 @@ Ensure your JSON file matches the required format:
 ```python
 import json
 
-with open('Group_01_leaderboard.json', 'r') as f:
+with open('TeamAlpha_leaderboard.json', 'r') as f:
     submission = json.load(f)
 
 # Required fields
-assert 'group_id' in submission
-assert 'group_name' in submission
-assert 'metrics' in submission
-assert 'dice_score' in submission['metrics']
-assert 'miou' in submission['metrics']
-assert 'fwiou' in submission['metrics']
-assert 'submission_date' in submission
+assert 'group_name' in submission, "Missing 'group_name'"
+assert 'project_private_repo_url' in submission, "Missing 'project_private_repo_url'"
+assert 'metrics' in submission, "Missing 'metrics'"
+assert 'dice_score' in submission['metrics'], "Missing 'dice_score'"
+assert 'miou' in submission['metrics'], "Missing 'miou'"
+assert 'fwiou' in submission['metrics'], "Missing 'fwiou'"
+
+# Validate URL format
+assert submission['project_private_repo_url'].startswith('https://github.com/'), "Invalid GitHub URL"
+assert submission['project_private_repo_url'].endswith('.git'), "URL should end with .git"
 
 print("✓ Submission format is valid!")
+print(f"Group: {submission['group_name']}")
+print(f"mIoU: {submission['metrics']['miou']}%")
 ```
 
 ---
@@ -108,20 +111,32 @@ print("✓ Submission format is valid!")
 
 | Metric | Baseline Value |
 |--------|----------------|
-| **Dice Score** | 38.54% |
-| **mIoU** | 32.93% |
-| **FWIoU** | 65.21% |
+| **Dice Score** | 39.80% |
+| **mIoU** | 72.73% |
+| **FWIoU** | 88.85% |
 
 **Training Configuration:**
-- Epochs: 5
-- Batch Size: 2
-- Learning Rate: 1e-4
+- Epochs: 100 (best at epoch 65)
+- Batch Size: 1
+- Learning Rate: 5e-5
 - Scale: 0.25
-- Hardware: CPU only
+- Optimizer: AdamW
+- Hardware: NVIDIA RTX 3060 6GB
+- **Classes**: 14 valid classes (excluded unnamed/missing classes)
 
 ---
 
 ## 💡 Tips for Improvement
+
+### 🚨 CRITICAL: Check Your Classes First!
+
+**Before training**, verify:
+1. ✅ Analyze your dataset to find actual class IDs
+2. ✅ Exclude classes with empty names in `cmap.py`
+3. ✅ Don't use classes that don't exist in your data
+4. ✅ Use only valid, named classes present in dataset
+
+**Wrong classes = Low mIoU (< 10%)!** See `TRAINING_TIPS.md` for details.
 
 ### Easy (Expected: +10-20% mIoU)
 1. Train more epochs (15-20)
@@ -141,6 +156,15 @@ print("✓ Submission format is valid!")
 
 ---
 
-## 🌐 Leaderboard Website & Baseline
+## 🌐 Leaderboard Website
 
-> **📢 The leaderboard submission website and baseline results will be announced later.**
+**Live Rankings**: [https://qian9921.github.io/leaderboard_web/](https://qian9921.github.io/leaderboard_web/)
+
+> View real-time leaderboard rankings and submit your results online!
+
+### Current Baseline
+- **mIoU**: 72.73% (Instructor Baseline)
+- **Dice Score**: 39.80%
+- **FWIoU**: 88.85%
+
+Beat this baseline to appear on the leaderboard! 🏆
