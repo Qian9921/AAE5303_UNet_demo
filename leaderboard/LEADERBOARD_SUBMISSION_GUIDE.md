@@ -2,7 +2,7 @@
 
 ## 📁 Evaluation Dataset
 
-**UAVScenes HKisland** - 2D Semantic Segmentation
+**UAVScenes AMtown02 (interval=5)** - 2D Semantic Segmentation
 
 | Resource | Link |
 |----------|------|

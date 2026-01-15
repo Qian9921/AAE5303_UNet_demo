@@ -2,7 +2,7 @@
 
 ## 📁 Evaluation Dataset
 
-**UAVScenes HKisland** - 2D Semantic Segmentation Dataset
+**UAVScenes AMtown02 (interval=5)** - 2D Semantic Segmentation Dataset
 
 | Resource | Link |
 |----------|------|
@@ -13,7 +13,7 @@
 
 ## 📊 Evaluation Metrics
 
-The leaderboard evaluates submissions using three standard semantic segmentation metrics. All metrics are computed on the **test set** (204 images).
+The leaderboard evaluates submissions using three standard semantic segmentation metrics. All metrics are computed on the **AMtown02 interval=5** split.
 
 ---
 
